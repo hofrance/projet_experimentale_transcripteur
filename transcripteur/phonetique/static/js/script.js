@@ -2,15 +2,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const transcriptionForm = document.getElementById('transcriptionForm');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
-    const audioPlayback = document.getElementById('audioPlayback');
+    const recordingIndicator = document.getElementById('recordingIndicator');
     const transcriptionResultDiv = document.getElementById('transcriptionResult');
     const transcriptionText = document.getElementById('transcriptionText');
     const alertBox = document.getElementById('alertBox');
     const alertText = document.getElementById('alertText');
-    const recordingIndicator = document.getElementById('recordingIndicator');
-    const inputText = document.getElementById('texte');  // Get the text input
+    const loadingIndicator = document.getElementById('loadingIndicator'); // Loading indicator
     let mediaRecorder;
     let audioChunks = [];
+  
+
+    function showLoadingIndicator() {
+        loadingIndicator.classList.remove('hidden');
+    }
+
+    function hideLoadingIndicator() {
+        loadingIndicator.classList.add('hidden');
+    }
 
     startBtn.addEventListener('click', function() {
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -52,10 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     transcriptionForm.addEventListener('submit', function(event) {
-        event.preventDefault();  // Prevent default form submission
+        event.preventDefault(); // Prevent default form submission
+        showLoadingIndicator(); // Show loading indicator
 
         const formData = new FormData(transcriptionForm);
-        formData.append('text', inputText.value);  // Make sure the text input is included
+        if (!audioChunks.length) { // Append text only if no audio was recorded
+            formData.append('text', transcriptionForm.querySelector('[name="text"]').value);
+        }
 
         fetch('/transcribe/', {
             method: 'POST',
@@ -63,8 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
-        }).then(response => response.json())
-        .then(data => {
+        }).then(response => {
+            hideLoadingIndicator(); // Hide loading indicator once the request is complete
+            return response.json();
+        }).then(data => {
             if (data.transcription) {
                 transcriptionText.textContent = data.transcription;
                 transcriptionResultDiv.classList.remove('hidden');
@@ -73,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 alertText.textContent = 'Échec de la transcription ou réponse inattendue du serveur.';
                 alertBox.classList.remove('hidden');
             }
-        })
-        .catch(error => {
+        }).catch(error => {
+            hideLoadingIndicator(); // Hide loading indicator in case of error
             console.error('Error:', error);
             alertText.textContent = 'Erreur lors de la transcription : ' + error.message;
             alertBox.classList.remove('hidden');
@@ -84,6 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendAudioAndTextToServer(audioBlob) {
         const formData = new FormData();
         formData.append('audio', audioBlob, 'recording.wav');
+        // Append text as well if provided
+        formData.append('text', transcriptionForm.querySelector('[name="text"]').value);
+
         fetch('/transcribe/', {
             method: 'POST',
             body: formData,

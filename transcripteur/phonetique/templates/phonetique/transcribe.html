@@ -6,35 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transcripteur Phonétique</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            background: linear-gradient(270deg, #2563EB, #EC4899, #10B981, #F59E0B);
+            background-size: 800% 800%;
+            animation: gradientBG 20s ease infinite;
+        }
+
+        .cube {
+            width: 50px;
+            height: 50px;
+            animation: cube-move 3s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes cube-move {
+            0%, 100% {
+                transform: translateX(0) translateY(0) scale(1);
+                background-color: #2563EB; /* Blue */
+            }
+            25% {
+                transform: translateX(100px) translateY(-100px) scale(1.5);
+                background-color: #EC4899; /* Pink */
+            }
+            50% {
+                transform: translateX(200px) translateY(0) scale(1);
+                background-color: #10B981; /* Green */
+            }
+            75% {
+                transform: translateX(100px) translateY(100px) scale(0.5);
+                background-color: #F59E0B; /* Amber */
+            }
+        }
+
+
+        @keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes blinkAndMove {
+    0%, 100% {
+        transform: translateX(0) scale(1);
+        color: #ffffff; /* Début avec la couleur blanche */
+    }
+    25% {
+        transform: translateX(10vw) scale(1.2); /* Déplace à droite et agrandit */
+        color: #FF6347; /* Tomate */
+    }
+    50% {
+        transform: translateX(-10vw) scale(1.5); /* Déplace à gauche et agrandit encore */
+        color: #4682B4; /* Bleu acier */
+    }
+    75% {
+        transform: translateX(5vw) scale(1.3); /* Retour partiel à droite et ajustement de taille */
+        color: #32CD32; /* Vert lime */
+    }
+}
+
+.phonetic-category h2 {
+    animation: blinkAndMove 8s linear infinite;
+}
+
+body {
+    padding-top: 60px; /* Ajustez cette valeur en fonction de la hauteur de votre barre de navigation */
+}
+
+    </style>
 </head>
-<body class="bg-gray-100 h-screen flex flex-col items-center justify-center">
-    <div class="w-full max-w-md">
+
+<body class="h-screen flex flex-col items-center justify-center">
+    {% include "../navbar.html" %}
+
+    <div class="w-full max-w-md px-4 sm:px-0">
+       
+        <select id="categorySelector"></select>
+        <button id="animationButton" onclick="toggleAnimation()">Mettre en pause</button>
+    
+        <div id="phoneticBlocks" class="flex flex-wrap justify-center mt-4 mb-4"></div>
+
         <h1 class="text-4xl font-bold mb-4 text-center">Transcrivez votre texte en phonétique</h1>
-        <form id="transcriptionForm" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
+        <form id="transcriptionForm" method="post" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
             {% csrf_token %}
+           
             <div class="mb-4">
                 <label for="texte" class="block text-gray-700 text-sm font-bold mb-2">Entrez votre texte ici :</label>
-                <textarea id="texte" name="text" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                <textarea id="texte" name="text" rows="4" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
             </div>
-            <div class="mb-4 flex items-center justify-between">
-                <button type="button" id="startBtn" aria-label="Démarrer l'enregistrement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <div class="mb-4 flex flex-col sm:flex-row justify-between gap-4">
+                <button type="button" id="startBtn" aria-label="Démarrer l'enregistrement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1">
                     Démarrer l'enregistrement
                 </button>
-                <button type="button" id="stopBtn" aria-label="Arrêter l'enregistrement" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" disabled>
+                <button type="button" id="stopBtn" aria-label="Arrêter l'enregistrement" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1" disabled>
                     Arrêter l'enregistrement
                 </button>
             </div>
-            <div class="flex items-center justify-between">
-                <meter id="recordingIndicator" min="0" max="1" value="0" low="0.2" high="0.5" optimum="0.7" class="w-full h-2 appearance-none rounded bg-gray-300 hidden"></meter>
-            </div>
+            <meter id="recordingIndicator" min="0" max="1" value="0" low="0.2" high="0.5" optimum="0.7" class="w-full h-2 appearance-none rounded bg-gray-300 hidden"></meter>
             <audio id="audioPlayback" controls class="mt-4 hidden"></audio>
             <div class="flex items-center justify-center mt-4">
-                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer">
                     Transcrire
                 </button>
             </div>
         </form>
-        <div id="transcriptionResult" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 hidden">
+        <div id="loadingIndicator" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="cube"></div>
+        </div>
+        <div id="transcriptionResult" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 hidden">
             <h2 class="text-xl font-bold mb-2">Transcription Phonétique</h2>
             <p class="text-gray-700" id="transcriptionText"></p>
         </div>
@@ -44,5 +139,6 @@
         </div>
     </div>
     <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/phonetic_blocks.js' %}"></script>
 </body>
 </html>

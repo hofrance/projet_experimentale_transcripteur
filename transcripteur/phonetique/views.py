@@ -8,6 +8,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 import logging
 import epitran
+from .fonctions import *
 
 # Configuration du logger
 logger = logging.getLogger(__name__)
@@ -33,8 +34,8 @@ def audio_to_text(audio_file_path):
 def convertir_en_phonetique(text):
     """ Convertit le texte en transcription phonétique en utilisant Epitran. """
     epi = epitran.Epitran('fra-Latn')
-    return epi.transliterate(text)
-
+  
+    return  formater_phonetique ( post_traitement_phonetique_avance (epi.transliterate(text)) )
 @csrf_exempt
 def transcribe_view(request):
     """ Traite les requêtes de transcription pour les entrées audio et textuelles. """
@@ -67,7 +68,10 @@ def get_cookie(request, name):
     return request.COOKIES.get(name, None)
 
 
-def jeux_view():
-    pass
+def jeux_view(request):
+   return render(request, 'phonetique/game.html')
 def upload_audio():
     pass
+
+
+

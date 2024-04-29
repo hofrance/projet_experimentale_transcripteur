@@ -29,9 +29,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
-VOSK_MODEL_DIR = os.path.join(BASE_DIR, 'vosk_models')
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
