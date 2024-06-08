@@ -1,4 +1,4 @@
-Voici un fichier `README.md` complet qui inclut les instructions pour installer un projet Django à partir d'un dépôt Git sur Windows, macOS, et Linux.
+
 
 ```markdown
 # Django Project Setup
