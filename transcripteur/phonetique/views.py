@@ -7,6 +7,8 @@ import os
 import logging
 import speech_recognition as sr
 import epitran
+import platform  # Importation manquante ajoutée
+import subprocess  # Importation manquante ajoutée
 from .fonctions import formater_phonetique, post_traitement_phonetique_avance
 
 logger = logging.getLogger(__name__)
