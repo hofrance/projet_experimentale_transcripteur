@@ -1,13 +1,11 @@
 import re
 
-
 def post_traitement_phonetique_avance(phonetique):
     """
     Applique un post-traitement avancé à une transcription phonétique pour affiner
     sa conformité aux spécificités de prononciation du français. Cette version enrichie
     inclut des corrections supplémentaires pour traiter des cas spécifiques de la langue.
     """
-
     corrections = [
         # Correction des liaisons et enchaînements
         (r'(?<=[z s x t n]) (?=[aeiouɛɔɑœ])', '‿'),

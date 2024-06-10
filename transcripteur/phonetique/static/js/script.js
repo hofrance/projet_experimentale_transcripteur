@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingIndicator = document.getElementById('loadingIndicator'); // Loading indicator
     let mediaRecorder;
     let audioChunks = [];
-  
 
     function showLoadingIndicator() {
         loadingIndicator.classList.remove('hidden');
@@ -21,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     startBtn.addEventListener('click', function() {
+        console.log("Start button clicked");
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
+                console.log("Microphone access granted");
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.ondataavailable = event => {
                     if (event.data.size > 0) {
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     stopBtn.addEventListener('click', function() {
+        console.log("Stop button clicked");
         mediaRecorder.stop();
         mediaRecorder.onstop = () => {
             if (audioChunks.length > 0 && audioChunks[0].size > 0) {
