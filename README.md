@@ -1,4 +1,7 @@
-# README pour Projet Expérimental Transcripteur
+Voici le README complet pour une installation sereine du projet expérimental de transcription :
+
+```markdown
+# Projet Expérimental Transcripteur
 
 ## Introduction
 Ce projet est un outil expérimental de transcription destiné à convertir des fichiers audio ou du texte en texte phonétique. Ce guide vous aidera à configurer et exécuter le serveur de transcription.
@@ -7,6 +10,7 @@ Ce projet est un outil expérimental de transcription destiné à convertir des 
 - Python 3.7 ou supérieur
 - Environnement virtuel (venv)
 - Git
+- FFmpeg
 
 ## Installation
 
@@ -51,20 +55,38 @@ Utilisez le gestionnaire de paquets de votre distribution. Par exemple, sur Ubun
 sudo apt install git
 ```
 
-### 3. Cloner le dépôt
+### 3. Installer FFmpeg
+
+#### Utilisation de Winget
+1. Ouvrez PowerShell ou le Terminal en tant que admin.
+2. Exécutez la commande suivante :
+    ```powershell
+    winget install ffmpeg
+    ```
+3. Ajoutez le répertoire `bin` de FFmpeg au Path de Windows :
+    ```plaintext
+    C:\Users\<votre_nom_utilisateur>\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-6.0-full_build\bin
+    ```
+    Remplacez `<votre_nom_utilisateur>` par votre nom d'utilisateur réel.
+4. Vérifiez l'installation :
+    ```powershell
+    ffmpeg -version
+    ```
+
+### 4. Cloner le dépôt
 Pour cloner le dépôt, exécutez la commande suivante :
 ```bash
 git clone https://github.com/hofrance/projet_experimentale_transcripteur.git
 cd projet_experimentale_transcripteur
 ```
 
-### 4. Créer un environnement virtuel
+### 5. Créer un environnement virtuel
 Créez un environnement virtuel pour isoler les dépendances du projet :
 ```bash
 python -m venv myenv
 ```
 
-### 5. Activer l'environnement virtuel
+### 6. Activer l'environnement virtuel
 Activez l'environnement virtuel avec les commandes appropriées pour votre système d'exploitation :
 
 - Sur Windows :
@@ -77,27 +99,22 @@ Activez l'environnement virtuel avec les commandes appropriées pour votre syst�
     source myenv/bin/activate
     ```
 
-### 6. Installer les dépendances
+### 7. Installer les dépendances
 Installez les dépendances nécessaires en utilisant le fichier `requirements.txt` :
 ```bash
 pip install -r requirements.txt
 ```
 
-### 7. Installer Django
+### 8. Installer Django
 Assurez-vous d'avoir Django installé :
 ```bash
 pip install django
 ```
 
-### 8. Installer FFmpeg
-Pour installer FFmpeg, exécutez le script PowerShell fourni (`install_ffmpeg.ps1`) à la racine du projet
-en se trouvant à la racine du projet au même niveau que le readme
-```bash
-.\install_ffmpeg.ps1
-```
-
 ### 9. Configurer le Projet
 
+#### Variables d'Environnement
+Configurez les variables d'environnement nécessaires. Créez un fichier `.env` à la racine du projet et ajoutez les variables requises, telles que les clés API et les configurations de la base de données.
 
 
 
