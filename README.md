@@ -89,31 +89,17 @@ Assurez-vous d'avoir Django installé :
 pip install django
 ```
 
-### 8. Configurer le Projet
-
-#### Variables d'Environnement
-Configurez les variables d'environnement nécessaires. Créez un fichier `.env` à la racine du projet et ajoutez les variables requises, telles que les clés API et les configurations de la base de données.
-
-#### Exemple de fichier `.env`
-```
-SECRET_KEY=votre_clé_secrète
-DEBUG=True
-DATABASE_URL=sqlite:///db.sqlite3
-```
-
-### 9. Initialiser la Base de Données
-
-Exécutez les migrations de base de données pour configurer la base de données :
+### 8. Installer FFmpeg
+Pour installer FFmpeg, exécutez le script PowerShell fourni (`install_ffmpeg.ps1`) à la racine du projet
+en se trouvant à la racine du projet au même niveau que le readme
 ```bash
-python manage.py migrate
+.\install_ffmpeg.ps1
 ```
 
-### 10. Créer un Super Utilisateur
+### 9. Configurer le Projet
 
-Pour accéder à l'interface d'administration, créez un super utilisateur :
-```bash
-python manage.py createsuperuser
-```
+
+
 
 ## Lancer le Serveur
 
@@ -155,18 +141,3 @@ Ouvrez votre navigateur web et allez à `http://127.0.0.1:8000/`.
 ### Problèmes Courants
 - **Problèmes de Dépendances** : Assurez-vous d'avoir correctement installé toutes les dépendances avec `pip install -r requirements.txt`.
 - **Problèmes de Serveur** : Vérifiez que le port 8000 est libre et que le serveur est démarré correctement.
-
-### Logs et Debugging
-Pour obtenir plus d'informations sur les erreurs, consultez les logs du serveur et utilisez les outils de debugging intégrés de Django.
-
-## Contributions
-Les contributions sont les bienvenues. Veuillez suivre ces étapes pour contribuer :
-1. Forkez le dépôt.
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/ma-fonctionnalité`).
-3. Commitez vos modifications (`git commit -m 'Ajouter ma fonctionnalité'`).
-4. Poussez votre branche (`git push origin feature/ma-fonctionnalité`).
-5. Ouvrez une Pull Request.
-
-## Contact
-
-Pour toute question ou support, veuillez contacter le mainteneur du projet via le tracker d'issues du dépôt GitHub.
