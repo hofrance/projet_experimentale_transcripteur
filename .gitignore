@@ -1,0 +1,78 @@
+# Ignorer les fichiers binaires lourds
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+*.apk
+*.jar
+*.class
+*.o
+*.a
+*.lib
+*.pyc
+*.pyo
+
+# Ignorer les fichiers d'archive
+*.zip
+*.tar.gz
+*.tar.bz2
+*.tar
+*.rar
+*.7z
+
+# Ignorer les fichiers audio et vidéo lourds
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Ignorer les images lourdes
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+
+# Ignorer les fichiers de sauvegarde
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# Ignorer les dossiers d'environnement virtuel Python
+venv/
+env/
+myenv/
+.virtualenv/
+__pycache__/
+
+# Ignorer les fichiers de configuration spécifiques à l'IDE
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Ignorer les fichiers de logs
+*.log
+
+# Ignorer les fichiers générés par le système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignorer les fichiers spécifiques au projet
+transcripteur/$DestinationPath/ffmpeg-7.0.1-full_build/bin/ffmpeg.exe
+transcripteur/$DestinationPath/ffmpeg-7.0.1-full_build/bin/ffplay.exe
+transcripteur/$DestinationPath/ffmpeg-7.0.1-full_build/bin/ffprobe.exe
