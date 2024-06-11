@@ -1,6 +1,4 @@
-Voici le README complet pour une installation sereine du projet expérimental de transcription :
 
-```markdown
 # Projet Expérimental Transcripteur
 
 ## Introduction

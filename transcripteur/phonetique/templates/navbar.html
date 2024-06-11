@@ -1,48 +1,71 @@
-{% load static %}
-<div class="bg-gray-800 w-full fixed top-0 z-50">
-    <div class="mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <img class="h-8 w-8" src="{% static 'images/logo.png' %}" alt="Logo">
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="http://127.0.0.1:8000/transcribe/#" class="text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
-                        <a href="http://127.0.0.1:8000/transcribe/#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
-                        <a href="http://127.0.0.1:8000/transcribe/#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Services</a>
-                        <a href="http://127.0.0.1:8000/jeux/#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Jeux</a>
+{% load static %}{% load static %}
+
+ <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .nav-link:hover {
+            transform: scale(1.1);
+        }
+        .logo-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 w-full fixed top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="logo-text">Par dela les mots</span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="/" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a href="/about/" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Quis somme nous</a>
+                            <a href="/transcribe/" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Notre service</a>
+                            <a href="/jeux/" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Jeux</a>
+                        </div>
                     </div>
                 </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button id="mobile-menu-button" class="nav-link p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="-mr-2 flex md:hidden">
-                <button id="mobile-menu-button" class="text-gray-300 hover:bg-gray-700 hover:text-white inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <span class="sr-only">Open main menu</span>
-                    <!-- Icon for menu -->
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="/" class="block nav-link px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="/about/" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium">About</a>
+                <a href="/services/" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="/contact/" class="block nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium">Contact</a>
             </div>
         </div>
     </div>
-    <div id="mobile-menu" class="md:hidden hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="/" class="text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Home</a>
-            <a href="/about/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
-            <a href="/services/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
-            <a href="/contact/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
         });
-    });
-</script>
+    </script>
+

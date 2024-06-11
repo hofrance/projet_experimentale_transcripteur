@@ -1,68 +1,145 @@
 const words = [
-    { word: "apple", options: ["/ˈæpl/", "/ˈbænənə/", "/ˈɒrɪndʒ/", "/ˈstraɪ.bər.i/"], answerIndex: 0 },
-    { word: "banana", options: ["/ˈæpl/", "/ˈbænənə/", "/ˈɒrɪndʒ/", "/ˈstraɪ.bər.i/"], answerIndex: 1 },
-    { word: "orange", options: ["/ˈæpl/", "/ˈbænənə/", "/ˈɒrɪndʒ/", "/ˈstraɪ.bər.i/"], answerIndex: 2 },
-    { word: "strawberry", options: ["/ˈæpl/", "/ˈbænənə/", "/ˈɒrɪndʒ/", "/ˈstraɪ.bər.i/"], answerIndex: 3 }
+    {
+        word: "arbre",
+        options: ["/aʁbʁ/", "/ɑʁb/", "/ɑʁbʁə/", "/aʁ.bʁə/"],
+        answerIndex: 0,
+        explanation: "Le mot 'arbre' est composé du son guttural /aʁ/ et du son vibré /bʁ/. En API: /aʁbʁ/."
+    },
+    {
+        word: "chat",
+        options: ["/ʃa/", "/ʃɑ/", "/ʃat/", "/ʃɑt/"],
+        answerIndex: 2,
+        explanation: "Le mot 'chat' contient le son chuintant /ʃ/ et le son bref /a/. En API: /ʃat/."
+    },
+    {
+        word: "soleil",
+        options: ["/sɔ.lɛj/", "/sɔ.lɛjə/", "/sɔ.lɛj.lə/", "/sɔ.lɛj.jə/"],
+        answerIndex: 1,
+        explanation: "Le mot 'soleil' contient les sons /sɔ/ et /lɛj/, un mélange de voyelles et de semi-voyelles. En API: /sɔ.lɛjə/."
+    },
+    {
+        word: "chien",
+        options: ["/ʃjɛ̃/", "/ʃiɛn/", "/ʃɛn/", "/ʃɑn/"],
+        answerIndex: 0,
+        explanation: "Le mot 'chien' contient le son chuintant /ʃ/ et le son nasal /jɛ̃/. En API: /ʃjɛ̃/."
+    },
+    {
+        word: "maison",
+        options: ["/mɛ.zɔ̃/", "/mɛ.zɔn/", "/mɛ.zon/", "/mɛz.jɔ̃/"],
+        answerIndex: 0,
+        explanation: "Le mot 'maison' contient les sons /mɛ/ et /zɔ̃/, un mélange de consonnes et de voyelles nasales. En API: /mɛ.zɔ̃/."
+    },
+    {
+        word: "eau",
+        options: ["/o/", "/ɔ/", "/ou/", "/eau/"],
+        answerIndex: 0,
+        explanation: "Le mot 'eau' est représenté par le son simple /o/. En API: /o/."
+    },
+    {
+        word: "feu",
+        options: ["/fø/", "/fœ/", "/fɥ/", "/fe/"],
+        answerIndex: 0,
+        explanation: "Le mot 'feu' est représenté par le son arrondi /fø/. En API: /fø/."
+    },
+    {
+        word: "lune",
+        options: ["/lyn/", "/lɥn/", "/lun/", "/lɔn/"],
+        answerIndex: 0,
+        explanation: "Le mot 'lune' contient les sons /l/ et /yn/. En API: /lyn/."
+    },
+    {
+        word: "table",
+        options: ["/tabl/", "/tablə/", "/tablə/", "/tab.lə/"],
+        answerIndex: 2,
+        explanation: "Le mot 'table' contient les sons /t/ et /bl/. En API: /tabl/."
+    },
+    {
+        word: "roi",
+        options: ["/ʁwa/", "/ʁoa/", "/ʁwaɪ/", "/ʁoɪ/"],
+        answerIndex: 0,
+        explanation: "Le mot 'roi' contient les sons /ʁ/ et /wa/. En API: /ʁwa/."
+    },
+    {
+        word: "pied",
+        options: ["/pje/", "/piɛ/", "/pɪe/", "/pie/"],
+        answerIndex: 0,
+        explanation: "Le mot 'pied' est représenté par le son /pje/. En API: /pje/."
+    },
+    {
+        word: "fleur",
+        options: ["/flœʁ/", "/flœr/", "/flɛʁ/", "/fləʁ/"],
+        answerIndex: 0,
+        explanation: "Le mot 'fleur' contient les sons /fl/ et /œʁ/. En API: /flœʁ/."
+    },
+    {
+        word: "livre",
+        options: ["/livʁ/", "/livəʁ/", "/livrə/", "/liv.rə/"],
+        answerIndex: 0,
+        explanation: "Le mot 'livre' contient les sons /l/ et /ivʁ/. En API: /livʁ/."
+    },
+    {
+        word: "voiture",
+        options: ["/vwa.tyʁ/", "/voat.yʁ/", "/vwat.yʁ/", "/voa.tyʁ/"],
+        answerIndex: 0,
+        explanation: "Le mot 'voiture' contient les sons /v/ et /wa.tyʁ/. En API: /vwa.tyʁ/."
+    },
+    {
+        word: "oiseau",
+        options: ["/wazo/", "/wazɔ/", "/wazou/", "/waso/"],
+        answerIndex: 0,
+        explanation: "Le mot 'oiseau' contient les sons /w/ et /azo/. En API: /wazo/."
+    },
+    {
+        word: "ami",
+        options: ["/ami/", "/ɑmi/", "/amiʃ/", "/amɪ/"],
+        answerIndex: 0,
+        explanation: "Le mot 'ami' contient les sons /a/ et /mi/. En API: /ami/."
+    },
+    {
+        word: "soleil",
+        options: ["/sɔ.lɛj/", "/sɔ.lɛjə/", "/sɔ.lɛj.lə/", "/sɔ.lɛj.jə/"],
+        answerIndex: 1,
+        explanation: "Le mot 'soleil' contient les sons /sɔ/ et /lɛj/. En API: /sɔ.lɛjə/."
+    },
+    {
+        word: "porte",
+        options: ["/pɔʁt/", "/pɔrtə/", "/pɔʁtə/", "/pɔʁt.lə/"],
+        answerIndex: 0,
+        explanation: "Le mot 'porte' contient les sons /p/ et /ɔʁt/. En API: /pɔʁt/."
+    },
+    {
+        word: "école",
+        options: ["/e.kɔl/", "/e.kɔlə/", "/e.kɔ.lə/", "/e.kɔl.ə/"],
+        answerIndex: 0,
+        explanation: "Le mot 'école' contient les sons /e/ et /kɔl/. En API: /e.kɔl/."
+    },
+    {
+        word: "étoile",
+        options: ["/e.twal/", "/e.twa.lə/", "/e.twalə/", "/e.twa.lə/"],
+        answerIndex: 0,
+        explanation: "Le mot 'étoile' contient les sons /e/ et /twal/. En API: /e.twal/."
+    }
+    // Ajoutez d'autres mots avec leurs options et explications ici...
 ];
 
-let currentIndex = 0;
-let score = 0;
-
-function createCard(word) {
-    const card = document.createElement('div');
-    card.classList.add('bg-blue-200', 'p-4', 'rounded-md', 'text-center', 'cursor-pointer', 'card');
-    card.innerHTML = `
-        <div class="font-bold text-lg mb-2">${word.word}</div>
-        <div id="options-container" class="flex flex-wrap justify-center gap-4"></div>
-    `;
-    const optionsContainer = card.querySelector('#options-container');
-    word.options.forEach((option, index) => {
-        const optionButton = document.createElement('input');
-        optionButton.type = "radio";
-        optionButton.name = "options";
-        optionButton.value = index;
-        optionButton.id = `option-${index}`;
-        const optionLabel = document.createElement('label');
-        optionLabel.htmlFor = `option-${index}`;
-        optionLabel.textContent = option;
-        optionsContainer.appendChild(optionButton);
-        optionsContainer.appendChild(optionLabel);
-    });
-    return card;
-}
-
-function updateScore(correct) {
-    const scoreElement = document.getElementById('score');
-    if (correct) {
-        score += 10; // Augmenter le score de 10 points pour chaque réponse correcte
-    } else {
-        score = Math.max(0, score - 5); // Diminuer le score de 5 points pour chaque erreur
-    }
-    scoreElement.textContent = score; // Mettre à jour l'affichage du score
-}
-
-function displayNextWord() {
-    if (currentIndex >= words.length) {
-        alert("Le jeu est terminé ! Votre score final est : " + score);
-        currentIndex = 0; // Réinitialiser pour une nouvelle partie
-        score = 0; // Réinitialiser le score
-    }
-    gameContainer.innerHTML = ''; // Effacer le contenu actuel
-    const currentWord = words[currentIndex];
-    const card = createCard(currentWord);
-    card.addEventListener('click', () => {
-        const selectedOption = document.querySelector('input[name="options"]:checked');
-        if (selectedOption) {
-            const userAnswerIndex = parseInt(selectedOption.value);
-            const correct = userAnswerIndex === currentWord.answerIndex;
-            updateScore(correct);
-            currentIndex++; // Passer au mot suivant
-            setTimeout(displayNextWord, 2000); // Attendre 2 secondes avant de passer au mot suivant
-        } else {
-            alert("Veuillez sélectionner une option !");
+function getUniqueWords() {
+    const wordsSet = new Set();
+    const uniqueWords = words.filter(word => {
+        const serialized = JSON.stringify([word.word, ...word.options]);
+        if (!wordsSet.has(serialized)) {
+            wordsSet.add(serialized);
+            return true;
         }
+        return false;
     });
-    gameContainer.appendChild(card);
+
+    shuffleArray(uniqueWords);
+    return uniqueWords;
 }
 
-displayNextWord(); // Démarrer le jeu en affichant le premier mot
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}

@@ -39,7 +39,6 @@ const phoneticLetters = [
     // Ajoutez d'autres catégories avec leurs lettres correspondantes ici
 ];
 
-
 let animationPaused = false;
 let currentCategoryIndex = 0;
 
@@ -111,3 +110,25 @@ function toggleAnimation() {
     const animationButton = document.getElementById("animationButton");
     animationButton.textContent = animationPaused ? "Reprendre l'animation" : "Mettre en pause";
 }
+
+// Ajout de styles CSS pour les animations et les éléments
+const style = document.createElement('style');
+style.textContent = `
+    .phonetic-block {
+        transition: transform 1s ease, background-color 1s ease, color 1s ease;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        color: #333333;
+    }
+    .phonetic-block:hover {
+        background-color: #4CAF50; /* Green */
+        color: #ffffff;
+        transform: scale(1.2);
+    }
+    .phonetic-category h2 {
+        animation: blinkAndMove 8s linear infinite;
+    }
+`;
+document.head.append(style);

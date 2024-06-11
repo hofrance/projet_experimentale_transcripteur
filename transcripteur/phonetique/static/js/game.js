@@ -3,58 +3,23 @@ document.addEventListener("DOMContentLoaded", function() {
     const scoreDisplay = document.getElementById('score');
     const timerDisplay = document.getElementById('timer');
     const explanationDisplay = document.getElementById('explanation');
+    const correctSound = document.getElementById('correct-sound');
+    const incorrectSound = document.getElementById('incorrect-sound');
+    const questionSound = document.getElementById('question-sound');
+    const restartButton = document.getElementById('restart-button');
+    const pauseButton = document.getElementById('pause-button');
     let score = 0;
     let currentIndex = 0;
     let timeLeft = 60; // 60 seconds for the game
+    let isPaused = false;
+    let timerInterval;
     const uniqueWords = getUniqueWords();
 
     displayNextWord();
     startTimer();
 
-    function getUniqueWords() {
-        const words = [
-            {
-                word: "arbre",
-                options: ["/aʁbʁ/", "/ɑʁb/", "/ɑʁbʁə/", "/aʁ.bʁə/"],
-                answerIndex: 0,
-                explanation: "Le mot 'arbre' est composé du son guttural /aʁ/ et du son vibré /bʁ/. En API: /aʁbʁ/."
-            },
-            {
-                word: "chat",
-                options: ["/ʃa/", "/ʃɑ/", "/ʃat/", "/ʃɑt/"],
-                answerIndex: 2,
-                explanation: "Le mot 'chat' contient le son chuintant /ʃ/ et le son bref /a/. En API: /ʃat/."
-            },
-            {
-                word: "soleil",
-                options: ["/sɔ.lɛj/", "/sɔ.lɛjə/", "/sɔ.lɛj.lə/", "/sɔ.lɛj.jə/"],
-                answerIndex: 1,
-                explanation: "Le mot 'soleil' contient les sons /sɔ/ et /lɛj/, un mélange de voyelles et de semi-voyelles. En API: /sɔ.lɛjə/."
-            },
-            // Continuez avec les autres mots...
-        ];
-
-        // Utiliser une structure de données Set pour filtrer les doublons
-        const wordsSet = new Set();
-        const uniqueWords = words.filter(word => {
-            const serialized = JSON.stringify([word.word, ...word.options]);
-            if (!wordsSet.has(serialized)) {
-                wordsSet.add(serialized);
-                return true;
-            }
-            return false;
-        });
-
-        shuffleArray(uniqueWords);
-        return uniqueWords;
-    }
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+    restartButton.addEventListener('click', restartGame);
+    pauseButton.addEventListener('click', togglePause);
 
     function createCard(word) {
         const card = document.createElement('div');
@@ -76,14 +41,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function handleOptionClick(selectedIndex, correctIndex, card, explanation) {
+        if (isPaused) return;
+
         const allButtons = card.querySelectorAll('button');
         allButtons.forEach(button => button.disabled = true);
 
         if (selectedIndex === correctIndex) {
             card.classList.add('correct');
             score++;
+            correctSound.play();
         } else {
             card.classList.add('incorrect');
+            incorrectSound.play();
         }
 
         explanationDisplay.textContent = explanation;
@@ -102,16 +71,21 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function displayNextWord() {
+        if (isPaused) return;
+
         if (currentIndex < uniqueWords.length) {
             const currentWord = uniqueWords[currentIndex];
             const card = createCard(currentWord);
             gameContainer.innerHTML = '';
             gameContainer.appendChild(card);
+            questionSound.play();
         }
     }
 
     function startTimer() {
-        const timerInterval = setInterval(() => {
+        timerInterval = setInterval(() => {
+            if (isPaused) return;
+
             timeLeft--;
             timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
             if (timeLeft <= 0) {
@@ -121,7 +95,31 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 1000);
     }
 
+    function restartGame() {
+        clearInterval(timerInterval);
+        score = 0;
+        currentIndex = 0;
+        timeLeft = 60;
+        isPaused = false;
+        scoreDisplay.textContent = `Score : ${score}`;
+        timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
+        explanationDisplay.classList.add('hidden');
+        displayNextWord();
+        startTimer();
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        if (isPaused) {
+            pauseButton.textContent = 'Reprendre';
+        } else {
+            pauseButton.textContent = 'Pause';
+            displayNextWord();
+        }
+    }
+
     function endGame() {
         gameContainer.innerHTML = `<div class='text-center text-xl font-semibold'>Le jeu est terminé ! Votre score : ${score}</div>`;
+        clearInterval(timerInterval);
     }
 });

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-green-400">
+    {% include "navbar.html" %}
+    <div class="text-center">
+        <h1 class="text-6xl font-bold text-white">Bienvenue sur le Transcripteur Phonétique</h1>
+        <p class="mt-4 text-xl text-white">Transformez vos textes et audios en transcription phonétique.</p>
+        <div class="mt-6">
+            <a href="{% url 'transcribe' %}" class="bg-white text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">Commencer</a>
+        </div>
+    </div>
+</body>
+</html>

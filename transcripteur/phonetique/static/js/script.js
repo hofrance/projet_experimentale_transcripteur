@@ -7,9 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const transcriptionText = document.getElementById('transcriptionText');
     const alertBox = document.getElementById('alertBox');
     const alertText = document.getElementById('alertText');
-    const loadingIndicator = document.getElementById('loadingIndicator'); // Loading indicator
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const restartButton = document.getElementById('restart-button');
+    const pauseButton = document.getElementById('pause-button');
     let mediaRecorder;
     let audioChunks = [];
+    let isPaused = false;
 
     function showLoadingIndicator() {
         loadingIndicator.classList.remove('hidden');
@@ -19,11 +22,25 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingIndicator.classList.add('hidden');
     }
 
+    function restartForm() {
+        transcriptionForm.reset();
+        transcriptionResultDiv.classList.add('hidden');
+        alertBox.classList.add('hidden');
+        audioChunks = [];
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        recordingIndicator.style.display = 'none';
+        hideLoadingIndicator();
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        pauseButton.textContent = isPaused ? 'Reprendre' : 'Pause';
+    }
+
     startBtn.addEventListener('click', function() {
-        console.log("Start button clicked");
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
-                console.log("Microphone access granted");
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.ondataavailable = event => {
                     if (event.data.size > 0) {
@@ -36,14 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 recordingIndicator.style.display = 'block';
             })
             .catch(err => {
-                console.error("Error accessing media devices: ", err);
                 alertText.textContent = "Erreur d'accès au micro : " + err.message;
                 alertBox.classList.remove('hidden');
             });
     });
 
     stopBtn.addEventListener('click', function() {
-        console.log("Stop button clicked");
         mediaRecorder.stop();
         mediaRecorder.onstop = () => {
             if (audioChunks.length > 0 && audioChunks[0].size > 0) {
@@ -53,20 +68,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
             } else {
-                console.error("No audio data available.");
                 alertText.textContent = "Aucune donnée audio disponible.";
                 alertBox.classList.remove('hidden');
             }
-            audioChunks = []; // Clear audio chunks after processing
+            audioChunks = [];
         };
     });
 
     transcriptionForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-        showLoadingIndicator(); // Show loading indicator
+        event.preventDefault();
+        showLoadingIndicator();
 
         const formData = new FormData(transcriptionForm);
-        if (!audioChunks.length) { // Append text only if no audio was recorded
+        if (!audioChunks.length) {
             formData.append('text', transcriptionForm.querySelector('[name="text"]').value);
         }
 
@@ -76,10 +90,9 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
-        }).then(response => {
-            hideLoadingIndicator(); // Hide loading indicator once the request is complete
-            return response.json();
-        }).then(data => {
+        }).then(response => response.json())
+        .then(data => {
+            hideLoadingIndicator();
             if (data.transcription) {
                 transcriptionText.textContent = data.transcription;
                 transcriptionResultDiv.classList.remove('hidden');
@@ -89,8 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alertBox.classList.remove('hidden');
             }
         }).catch(error => {
-            hideLoadingIndicator(); // Hide loading indicator in case of error
-            console.error('Error:', error);
+            hideLoadingIndicator();
             alertText.textContent = 'Erreur lors de la transcription : ' + error.message;
             alertBox.classList.remove('hidden');
         });
@@ -99,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendAudioAndTextToServer(audioBlob) {
         const formData = new FormData();
         formData.append('audio', audioBlob, 'recording.wav');
-        // Append text as well if provided
         formData.append('text', transcriptionForm.querySelector('[name="text"]').value);
 
         fetch('/transcribe/', {
@@ -118,9 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alertText.textContent = 'Échec de la transcription.';
                 alertBox.classList.remove('hidden');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+        }).catch(error => {
             alertText.textContent = 'Erreur lors de la transcription : ' + error.message;
             alertBox.classList.remove('hidden');
         });
@@ -140,4 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return cookieValue;
     }
+
+    restartButton.addEventListener('click', restartForm);
+    pauseButton.addEventListener('click', togglePause);
 });
