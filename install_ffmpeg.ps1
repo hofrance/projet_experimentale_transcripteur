@@ -1,24 +1,19 @@
-$DestinationPath = "C:\Users\rbankouezi\Documents\projet_experimentale_transcripteur\ffmpeg_installation"
+# Téléchargement de l'archive ffmpeg
+Invoke-WebRequest -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -OutFile ffmpeg-release-essentials.zip
 
-# Créer le répertoire d'installation si nécessaire
-if (-Not (Test-Path -Path $DestinationPath)) {
-    New-Item -ItemType Directory -Force -Path $DestinationPath
-}
+# Création du dossier ffmpeg et extraction de l'archive
+New-Item -ItemType Directory -Path C:\ffmpeg -Force
+Expand-Archive -Path .\ffmpeg-release-essentials.zip -DestinationPath C:\ffmpeg -Force
 
-# Télécharger et extraire FFmpeg
-Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "$DestinationPath\ffmpeg.zip"
-Expand-Archive -Path "$DestinationPath\ffmpeg.zip" -DestinationPath $DestinationPath
+# Suppression de l'archive téléchargée
+Remove-Item -Path .\ffmpeg-release-essentials.zip
 
-# Déplacer les fichiers FFmpeg
-$ffmpegDir = Get-ChildItem -Directory -Path $DestinationPath | Where-Object { $_.Name -like "ffmpeg*" }
-Move-Item -Path "$ffmpegDir\*" -Destination $DestinationPath -Force
+# Ajout de ffmpeg au PATH
+$ffmpegPath = Get-ChildItem -Path C:\ffmpeg -Directory | Select-Object -First 1 | ForEach-Object { $_.FullName }
+$binPath = "$ffmpegPath\bin"
+$oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+$newPath = "$oldPath;$binPath"
+[Environment]::SetEnvironmentVariable('Path', $newPath, [EnvironmentVariableTarget]::Machine)
 
-# Supprimer les fichiers téléchargés
-Remove-Item -Path "$DestinationPath\ffmpeg.zip"
-Remove-Item -Path $ffmpegDir -Recurse
-
-# Ajouter FFmpeg au PATH pour la session actuelle
-$env:Path += ";$DestinationPath\bin"
-
-# Vérifier l'installation de FFmpeg
-ffmpeg -version
+# Affichage du message de succès
+Write-Host "Installation de ffmpeg terminée. Veuillez redémarrer PowerShell et vérifier avec 'ffmpeg -version'."

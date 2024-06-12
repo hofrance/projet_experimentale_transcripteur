@@ -1,4 +1,6 @@
+### README complet avec instructions de dépannage et ajout manuel du chemin de FFmpeg
 
+```markdown
 # Projet Expérimental Transcripteur
 
 ## Introduction
@@ -55,21 +57,53 @@ sudo apt install git
 
 ### 3. Installer FFmpeg
 
-#### Utilisation de Winget
-1. Ouvrez PowerShell ou le Terminal en tant que admin.
-2. Exécutez la commande suivante :
+#### Utilisation de PowerShell
+1. Créez un fichier nommé `install_ffmpeg.ps1` à la racine de votre projet Django avec le contenu suivant :
     ```powershell
-    winget install ffmpeg
+    # Téléchargement de l'archive ffmpeg
+    Invoke-WebRequest -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -OutFile ffmpeg-release-essentials.zip
+
+    # Création du dossier ffmpeg et extraction de l'archive
+    New-Item -ItemType Directory -Path C:\ffmpeg -Force
+    Expand-Archive -Path .\ffmpeg-release-essentials.zip -DestinationPath C:\ffmpeg -Force
+
+    # Suppression de l'archive téléchargée
+    Remove-Item -Path .\ffmpeg-release-essentials.zip
+
+    # Ajout de ffmpeg au PATH
+    $ffmpegPath = Get-ChildItem -Path C:\ffmpeg -Directory | Select-Object -First 1 | ForEach-Object { $_.FullName }
+    $binPath = "$ffmpegPath\bin"
+    $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+    $newPath = "$oldPath;$binPath"
+    [Environment]::SetEnvironmentVariable('Path', $newPath, [EnvironmentVariableTarget]::Machine)
+
+    # Affichage du message de succès
+    Write-Host "Installation de ffmpeg terminée. Veuillez redémarrer PowerShell et vérifier avec 'ffmpeg -version'."
     ```
-3. Ajoutez le répertoire `bin` de FFmpeg au Path de Windows :
-    ```plaintext
-    C:\Users\<votre_nom_utilisateur>\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-6.0-full_build\bin
+
+2. Exécutez le script PowerShell en tant qu'administrateur pour installer FFmpeg et ajouter le chemin au PATH :
+    ```powershell
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    .\install_ffmpeg.ps1
     ```
-    Remplacez `<votre_nom_utilisateur>` par votre nom d'utilisateur réel.
-4. Vérifiez l'installation :
+
+3. Redémarrez PowerShell et vérifiez l'installation :
     ```powershell
     ffmpeg -version
     ```
+
+#### Ajout manuel du chemin dans les variables d'environnement
+1. **Ouvrez le panneau de configuration** :
+    - Cliquez sur le menu Démarrer, tapez "Panneau de configuration" et ouvrez-le.
+2. **Accédez aux paramètres système avancés** :
+    - Cliquez sur "Système et sécurité" puis sur "Système".
+    - Cliquez sur "Paramètres système avancés" dans le menu de gauche.
+3. **Variables d'environnement** :
+    - Cliquez sur le bouton "Variables d'environnement" en bas de la fenêtre.
+4. **Modifier la variable Path** :
+    - Dans la section "Variables système", trouvez et sélectionnez la variable Path, puis cliquez sur "Modifier".
+    - Cliquez sur "Nouveau" et ajoutez le chemin complet vers le dossier `bin` de FFmpeg, par exemple : `C:\ffmpeg\ffmpeg-<version>-essentials_build\bin`.
+    - Cliquez sur "OK" pour fermer toutes les fenêtres.
 
 ### 4. Cloner le dépôt
 Pour cloner le dépôt, exécutez la commande suivante :
@@ -114,8 +148,6 @@ pip install django
 #### Variables d'Environnement
 Configurez les variables d'environnement nécessaires. Créez un fichier `.env` à la racine du projet et ajoutez les variables requises, telles que les clés API et les configurations de la base de données.
 
-
-
 ## Lancer le Serveur
 
 ### 1. Naviguer dans le Répertoire du Transcripteur
@@ -156,3 +188,62 @@ Ouvrez votre navigateur web et allez à `http://127.0.0.1:8000/`.
 ### Problèmes Courants
 - **Problèmes de Dépendances** : Assurez-vous d'avoir correctement installé toutes les dépendances avec `pip install -r requirements.txt`.
 - **Problèmes de Serveur** : Vérifiez que le port 8000 est libre et que le serveur est démarré correctement.
+- **FFmpeg non trouvé** : Assurez-vous que le chemin vers le dossier `bin` de FFmpeg est correctement ajouté à la variable d'environnement `Path`. Suivez les étapes de la section "Installer FFmpeg" pour vérifier et ajouter le chemin si nécessaire.
+- **Erreur de conversion avec FFmpeg** : Assurez-vous que FFmpeg est installé correctement et que le chemin est ajouté à la variable d'environnement `Path`. Vérifiez également que votre fichier audio est accessible et non corrompu.
+
+## Scripts Utiles
+
+### Script d'installation de FFmpeg (Windows)
+
+Un script PowerShell (`install_ffmpeg.ps1`) est fourni à la racine du projet pour faciliter l'installation de FFmpeg. Voici comment l'utiliser :
+
+1. **Créer le script** : Créez un fichier nommé `install_ffmpeg.ps1` à la racine du projet et collez-y le contenu suivant :
+
+    ```powershell
+    # Téléchargement de l'archive ffmpeg
+    Invoke-WebRequest -Uri https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -OutFile ffmpeg-release-essentials.zip
+
+    # Création du dossier ffmpeg et extraction de l'archive
+    New-Item -ItemType Directory -Path C:\ffmpeg -Force
+    Expand-Archive -Path .\ffmpeg-release-essentials.zip -DestinationPath C:\ffmpeg -Force
+
+    # Suppression de l'archive téléchargée
+    Remove-Item -Path .\ffmpeg-release-essentials.zip
+
+    # Ajout de ffmpeg au PATH
+    $ffmpegPath = Get-ChildItem -Path C:\ffmpeg -Directory | Select-Object -First 1 | ForEach-Object { $_.FullName }
+    $binPath = "$ffmpegPath\bin"
+    $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariable
+
+Target]::Machine)
+    $newPath = "$oldPath;$binPath"
+    [Environment]::SetEnvironmentVariable('Path', $newPath, [EnvironmentVariableTarget]::Machine)
+
+    # Affichage du message de succès
+    Write-Host "Installation de ffmpeg terminée. Veuillez redémarrer PowerShell et vérifier avec 'ffmpeg -version'."
+    ```
+
+2. Exécutez le script PowerShell en tant qu'administrateur pour installer FFmpeg et ajouter le chemin au PATH :
+    ```powershell
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    .\install_ffmpeg.ps1
+    ```
+
+3. Redémarrez PowerShell et vérifiez l'installation :
+    ```powershell
+    ffmpeg -version
+    ```
+
+#### Ajout manuel du chemin dans les variables d'environnement
+1. **Ouvrez le panneau de configuration** :
+    - Cliquez sur le menu Démarrer, tapez "Panneau de configuration" et ouvrez-le.
+2. **Accédez aux paramètres système avancés** :
+    - Cliquez sur "Système et sécurité" puis sur "Système".
+    - Cliquez sur "Paramètres système avancés" dans le menu de gauche.
+3. **Variables d'environnement** :
+    - Cliquez sur le bouton "Variables d'environnement" en bas de la fenêtre.
+4. **Modifier la variable Path** :
+    - Dans la section "Variables système", trouvez et sélectionnez la variable Path, puis cliquez sur "Modifier".
+    - Cliquez sur "Nouveau" et ajoutez le chemin complet vers le dossier `bin` de FFmpeg, par exemple : `C:\ffmpeg\ffmpeg-<version>-essentials_build\bin`.
+    - Cliquez sur "OK" pour fermer toutes les fenêtres.
+```
