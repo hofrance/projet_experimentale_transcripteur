@@ -3,16 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
+    <title>Bienvenue au Labo des Sons Mystérieux</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(270deg, #6A0572, #9A0573, #C51262, #E0194C);
+            background-size: 800% 800%;
+            animation: gradientBG 20s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .button-hover {
+            background-color: #34D399;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        .button-hover:hover {
+            background-color: #3B82F6;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .bling-bling {
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+                color: #fff700;
+                text-shadow: 0 0 5px #ff5f00, 0 0 10px #ff5f00, 0 0 15px #ff5f00, 0 0 20px #ff5f00, 0 0 25px #ff5f00, 0 0 30px #ff5f00, 0 0 35px #ff5f00;
+            }
+            50% {
+                opacity: 0.5;
+                color: #ffffff;
+                text-shadow: 0 0 2px #ff5f00, 0 0 4px #ff5f00, 0 0 6px #ff5f00, 0 0 8px #ff5f00, 0 0 10px #ff5f00, 0 0 12px #ff5f00, 0 0 14px #ff5f00;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-green-400">
+<body class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
     {% include "navbar.html" %}
-    <div class="text-center">
-        <h1 class="text-6xl font-bold text-white">Bienvenue sur le Transcripteur Phonétique</h1>
-        <p class="mt-4 text-xl text-white">Transformez vos textes et audios en transcription phonétique.</p>
+    <div class="container mx-auto p-4 text-center card">
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-6 text-white bling-bling">Bienvenue au Labo des Sons Mystérieux ! 🎧🔍</h1>
+        <p class="text-lg text-gray-700 mb-4">Parce que parfois, même les sons ont besoin d'un peu de magie. ✨</p>
+        <p class="text-md text-gray-700 mb-4">Plongez dans l'univers fascinant de la transcription phonétique, où vos fichiers audio prennent vie sous une nouvelle forme. Apprenez et amusez-vous en découvrant comment vos mots se transforment en sons mystérieux.</p>
         <div class="mt-6">
-            <a href="{% url 'transcribe' %}" class="bg-white text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">Commencer</a>
+            <a href="{% url 'upload_audio' %}" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 button-hover">Commencez l'Aventure Sonore</a>
         </div>
     </div>
 </body>
