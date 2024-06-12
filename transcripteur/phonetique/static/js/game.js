@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createCard(word) {
         const card = document.createElement('div');
-        card.className = 'bg-white shadow rounded p-4 m-2 transition-transform transform hover:scale-105';
+        card.className = 'bg-red shadow rounded p-4 m-2 transition-transform transform hover:scale-105';
         const wordTitle = document.createElement('h3');
         wordTitle.className = 'text-lg font-bold mb-4';
         wordTitle.textContent = word.word;
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 endGame();
             }
             scoreDisplay.textContent = `Score : ${score}`;
-        }, 3000); // Display explanation for 3 seconds
+        }, 10000); // Display explanation for 3 seconds
     }
 
     function displayNextWord() {

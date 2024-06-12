@@ -24,11 +24,39 @@
             }
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .button-hover {
+            background-color: #34D399;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        .button-hover:hover {
+            background-color: #3B82F6;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .upload-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .transcription-result {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        #alertBox {
+            max-width: 500px;
+            margin: 20px auto;
         }
 
         .team-member {
@@ -55,6 +83,13 @@
                 text-shadow: 0 0 2px #ff5f00, 0 0 4px #ff5f00, 0 0 6px #ff5f00, 0 0 8px #ff5f00, 0 0 10px #ff5f00, 0 0 12px #ff5f00, 0 0 14px #ff5f00;
             }
         }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
@@ -66,25 +101,29 @@
         <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="team-member">
                 <div class="p-4 bg-white rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-purple-800">Gael</h3>
+                    <img src="https://i.imgur.com/w3duR07.png" alt="Gael" class="profile-pic">
+                    <h3 class="text-xl font-bold text-purple-800 mt-4">Gael</h3>
                     <p class="mt-2 text-gray-700">Le maître historien perdu, toujours à la recherche de l'anecdote parfaite pour égayer nos réunions.</p>
                 </div>
             </div>
             <div class="team-member">
                 <div class="p-4 bg-white rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-purple-800">Richard</h3>
+                    <img src="https://i.imgur.com/3VV5X9i.jpg" alt="Richard" class="profile-pic">
+                    <h3 class="text-xl font-bold text-purple-800 mt-4">Richard</h3>
                     <p class="mt-2 text-gray-700">Artiste développeur web, maître artisan du transcripteur. Il transforme des lignes de code en œuvres d'art fonctionnelles.</p>
                 </div>
             </div>
             <div class="team-member">
                 <div class="p-4 bg-white rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-purple-800">Mehdi</h3>
+                    <img src="https://i.imgur.com/B1H43ST.jpg" alt="Mehdi" class="profile-pic">
+                    <h3 class="text-xl font-bold text-purple-800 mt-4">Mehdi</h3>
                     <p class="mt-2 text-gray-700">Le maître du jeu du bac, capable de transformer n'importe quelle situation en défi amusant et éducatif.</p>
                 </div>
             </div>
             <div class="team-member">
                 <div class="p-4 bg-white rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-purple-800">Aubin</h3>
+                    <img src="https://i.imgur.com/VtFfce4.jpg" alt="Aubin" class="profile-pic">
+                    <h3 class="text-xl font-bold text-purple-800 mt-4">Aubin</h3>
                     <p class="mt-2 text-gray-700">Un mixte parfait entre l'historien et le joueur, Aubin combine le meilleur des deux mondes pour apporter des solutions créatives.</p>
                 </div>
             </div>

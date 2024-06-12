@@ -46,12 +46,14 @@
             100% { background-color: #F8D7DA; }
         }
         .card {
-            background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+            background: url('https://example.com/background-image.jpg') no-repeat center center;
+            background-size: cover;
             border-radius: 15px;
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 2px solid #ff7e5f;
             padding: 2rem;
+            color: black; /* Ensure the text color is black for better visibility */
         }
         .card:hover {
             transform: translateY(-10px) scale(1.05);
@@ -79,7 +81,7 @@
             color: white;
             padding: 10px 20px;
             border-radius: 10px;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition:  0.3s ease, transform 0.3s ease;
             font-size: 1rem;
         }
         .button:hover {
@@ -121,9 +123,7 @@
         <h1 class="title mb-6">Jeu de Questions Phonétiques</h1>
         <div id="score" class="score mb-4">Score : 0</div>
         <div id="timer" class="timer mb-6">Temps restant : 60s</div>
-        <div class="progress w-full bg-gray-200 mb-6">
-            <div id="progress-bar" class="progress-bar w-0"></div>
-        </div>
+     
         <div id="game-container" class="game-container">
             <!-- The game cards will be dynamically generated here -->
         </div>
