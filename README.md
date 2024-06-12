@@ -1,6 +1,4 @@
-### README complet avec instructions de dépannage et ajout manuel du chemin de FFmpeg
 
-```markdown
 # Projet Expérimental Transcripteur
 
 ## Introduction
