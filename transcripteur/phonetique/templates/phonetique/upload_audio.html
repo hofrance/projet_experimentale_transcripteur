@@ -1,46 +1,115 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Audio</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.x/dist/tailwind.min.css" rel="stylesheet">
-    {% load static %}
+    <title>Téléversement d'Audio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body {
+            background: linear-gradient(270deg, #2563EB, #EC4899, #10B981, #F59E0B);
+            background-size: 800% 800%;
+            animation: gradientBG 20s ease infinite;
+        }
+        .upload-container {
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 100%, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .button-hover:hover {
+            transform: scale(1.1);
+        }
+        .transcription-result {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
-    <div class="container max-w-2xl mx-auto p-4">
-        {% include "navbar.html" %}
-        <h1 class="text-3xl font-bold text-center text-gray-700 mb-6">Upload Audio</h1>
-        <form id="uploadForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
+<body class="h-screen flex flex-col items-center justify-center">
+    {% include "../navbar.html" %}
+    <div class="w-full max-w-md px-4 sm:px-0">
+        <h1 class="text-4xl font-bold mb-4 text-center text-white">Téléversez votre fichier audio</h1>
+        <form id="uploadForm" method="post" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 upload-container" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="audio">Audio File</label>
-                <input type="file" id="audio" name="audio" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <label for="audio" class="block text-gray-700 text-sm font-bold mb-2">Sélectionnez un fichier audio :</label>
+                <input type="file" id="audio" name="audio" accept="audio/*" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
             </div>
-            <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Upload
+            <div class="flex items-center justify-center mt-4">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer button-hover">
+                    Transcrire
                 </button>
             </div>
         </form>
-        <div id="message" class="text-center text-lg font-semibold mt-4 hidden"></div>
+        <div id="transcriptionResult" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 hidden transcription-result">
+            <h2 class="text-xl font-bold mb-2">Transcription Phonétique</h2>
+            <p class="text-gray-700" id="transcriptionText"></p>
+        </div>
+        <div id="alertBox" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" role="alert">
+            <strong class="font-bold">Erreur!</strong>
+            <span class="block sm:inline" id="alertText"></span>
+        </div>
     </div>
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch("{% url 'upload_audio' %}", {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            }).then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('message');
-                messageDiv.textContent = data.message;
-                messageDiv.classList.remove('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadForm = document.getElementById('uploadForm');
+            const transcriptionResultDiv = document.getElementById('transcriptionResult');
+            const transcriptionText = document.getElementById('transcriptionText');
+            const alertBox = document.getElementById('alertBox');
+            const alertText = document.getElementById('alertText');
+
+            uploadForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(uploadForm);
+
+                fetch('/upload_audio/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.transcription) {
+                        transcriptionText.textContent = data.transcription;
+                        transcriptionResultDiv.classList.remove('hidden');
+                        alertBox.classList.add('hidden');
+                    } else {
+                        alertText.textContent = data.error || 'Échec de la transcription.';
+                        alertBox.classList.remove('hidden');
+                    }
+                }).catch(error => {
+                    alertText.textContent = 'Erreur lors de la transcription : ' + error.message;
+                    alertBox.classList.remove('hidden');
+                });
             });
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
         });
     </script>
 </body>

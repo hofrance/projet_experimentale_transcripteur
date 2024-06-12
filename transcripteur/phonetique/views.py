@@ -7,31 +7,27 @@ import os
 import logging
 import speech_recognition as sr
 import epitran
-import platform
-import subprocess
+from pydub import AudioSegment
 from .fonctions import formater_phonetique, post_traitement_phonetique_avance
 
 logger = logging.getLogger(__name__)
 
 def convert_to_wav(input_path):
+    """ Convertit un fichier audio au format WAV en utilisant pydub. """
     output_path = os.path.splitext(input_path)[0] + '_converted.wav'
-    command = ['ffmpeg', '-i', input_path, '-acodec', 'pcm_s16le', '-ar', '16000', '-ac', '1', output_path]
     
     try:
-        shell = platform.system() == 'Windows'
-        result = subprocess.run(command, check=True, stderr=subprocess.PIPE, shell=shell)
-        if result.returncode != 0:
-            raise subprocess.CalledProcessError(result.returncode, command)
+        audio = AudioSegment.from_file(input_path)
+        audio = audio.set_frame_rate(16000).set_channels(1)
+        audio.export(output_path, format="wav")
         logger.info(f"Conversion réussie: {input_path} -> {output_path}")
         return output_path
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Erreur de conversion avec ffmpeg: {e.stderr.decode()}")
-        raise RuntimeError(f"Erreur de conversion avec ffmpeg: {e.stderr.decode()}")
-    except FileNotFoundError:
-        logger.error("ffmpeg n'est pas installé ou n'est pas trouvé dans le PATH.")
-        raise RuntimeError("ffmpeg n'est pas installé ou n'est pas trouvé dans le PATH.")
+    except Exception as e:
+        logger.error(f"Erreur de conversion avec pydub: {str(e)}")
+        raise RuntimeError(f"Erreur de conversion avec pydub: {str(e)}")
 
 def audio_to_text(audio_file_path):
+    """ Transcrit l'audio en texte en utilisant l'API de reconnaissance vocale de Google. """
     recognizer = sr.Recognizer()
     with sr.AudioFile(audio_file_path) as source:
         audio_data = recognizer.record(source)
@@ -42,11 +38,13 @@ def audio_to_text(audio_file_path):
             return None
 
 def convertir_en_phonetique(text):
+    """ Convertit le texte en transcription phonétique en utilisant Epitran. """
     epi = epitran.Epitran('fra-Latn')
     return formater_phonetique(post_traitement_phonetique_avance(epi.transliterate(text)))
 
 @csrf_exempt
 def transcribe_view(request):
+    """ Traite les requêtes de transcription pour les entrées audio et textuelles. """
     if request.method == "POST":
         audio_file = request.FILES.get('audio')
         text_input = request.POST.get('text', None)
@@ -59,7 +57,7 @@ def transcribe_view(request):
                     full_path = convert_to_wav(full_path)
                 text_transcription = audio_to_text(full_path)
                 transcription = convertir_en_phonetique(text_transcription) if text_transcription else "Erreur lors de la transcription audio."
-                os.remove(full_path)
+                os.remove(full_path)  # Supprime le fichier après traitement pour éviter l'encombrement du serveur
                 return JsonResponse({'transcription': transcription}, safe=False)
             except RuntimeError as e:
                 return JsonResponse({'error': str(e)}, status=500)
@@ -71,14 +69,37 @@ def transcribe_view(request):
     else:
         return render(request, 'phonetique/transcribe.html')
 
+@csrf_exempt
+def upload_audio(request):
+    """ Permet le téléversement et la transcription de fichiers audio. """
+    if request.method == "POST":
+        audio_file = request.FILES.get('audio')
+
+        if audio_file:
+            try:
+                audio_path = default_storage.save(os.path.join('audios', os.urandom(16).hex()), audio_file)
+                full_path = os.path.join(settings.MEDIA_ROOT, audio_path)
+                if not full_path.endswith('.wav'):
+                    full_path = convert_to_wav(full_path)
+                text_transcription = audio_to_text(full_path)
+                transcription = convertir_en_phonetique(text_transcription) if text_transcription else "Erreur lors de la transcription audio."
+                os.remove(full_path)  # Supprime le fichier après traitement pour éviter l'encombrement du serveur
+                return JsonResponse({'transcription': transcription}, safe=False)
+            except RuntimeError as e:
+                return JsonResponse({'error': str(e)}, status=500)
+        else:
+            return JsonResponse({'error': 'Aucun fichier audio fourni'}, status=400)
+    else:
+        return render(request, 'phonetique/upload_audio.html')
+
 def jeux_view(request):
+    """ Affiche la vue du jeu phonétique. """
     return render(request, 'phonetique/game.html')
 
 def home_view(request):
+    """ Affiche la vue de la page d'accueil. """
     return render(request, 'phonetique/home.html')
 
 def about_view(request):
+    """ Affiche la vue de la page à propos. """
     return render(request, 'phonetique/about.html')
-
-def upload_audio():
-    pass

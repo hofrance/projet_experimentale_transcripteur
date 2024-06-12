@@ -85,13 +85,33 @@
             gap: 10px;
             margin-top: 20px;
         }
+        .phonetic-analysis {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .phonetic-item {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .phonetic-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .phonetic-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col items-center justify-center">
     {% include "../navbar.html" %}
     <div class="w-full max-w-md px-4 sm:px-0">
-        <select id="categorySelector"></select>
-        <div id="phoneticBlocks" class="flex flex-wrap justify-center mt-4 mb-4"></div>
         <h1 class="text-4xl font-bold mb-4 text-center">Transcrivez votre texte en phonétique</h1>
         <form id="transcriptionForm" method="post" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
             {% csrf_token %}
@@ -125,6 +145,10 @@
         <div id="transcriptionResult" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 hidden">
             <h2 class="text-xl font-bold mb-2">Transcription Phonétique</h2>
             <p class="text-gray-700" id="transcriptionText"></p>
+        </div>
+        <div id="phoneticAnalysis" class="phonetic-analysis hidden">
+            <h2 class="text-xl font-bold mb-2">Analyse des Sons</h2>
+            <div id="phoneticAnalysisContent"></div>
         </div>
         <div id="alertBox" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" role="alert">
             <strong class="font-bold">Erreur!</strong>
