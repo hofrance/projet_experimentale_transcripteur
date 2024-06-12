@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createCard(word) {
         const card = document.createElement('div');
-        card.className = 'bg-red-200 shadow rounded p-4 m-2 transition-transform transform hover:scale-105';
+        card.className = 'shadow rounded p-4 m-2 transition-transform transform hover:scale-105';
         const wordTitle = document.createElement('h3');
-        wordTitle.className = ' bg-red-200 text-lg font-bold mb-4';
+        wordTitle.className = ' text-lg font-bold mb-4';
         wordTitle.textContent = word.word;
         card.appendChild(wordTitle);
 

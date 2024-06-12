@@ -112,7 +112,7 @@
 <body class="h-screen flex flex-col items-center justify-center">
     {% include "../navbar.html" %}
     <div class="w-full max-w-md px-4 sm:px-0">
-        <h1 class="text-4xl font-bold mb-4 text-center">Transcrivez votre texte en phonétique</h1>
+        <h1 class="text-4xl font-bold mb-4 text-center">Transcription en phonétique</h1>
         <form id="transcriptionForm" method="post" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-4">
@@ -121,10 +121,10 @@
             </div>
             <div class="mb-4 flex flex-col sm:flex-row justify-between gap-4">
                 <button type="button" id="startBtn" aria-label="Démarrer l'enregistrement" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1">
-                    Démarrer l'enregistrement
+                    lancer l'audio<audio src=""></audio>
                 </button>
                 <button type="button" id="stopBtn" aria-label="Arrêter l'enregistrement" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1" disabled>
-                    Arrêter l'enregistrement
+                    stopper  l'audio
                 </button>
             </div>
             <meter id="recordingIndicator" min="0" max="1" value="0" low="0.2" high="0.5" optimum="0.7" class="w-full h-2 appearance-none rounded bg-gray-300 hidden"></meter>
@@ -147,7 +147,7 @@
             <p class="text-gray-700" id="transcriptionText"></p>
         </div>
         <div id="phoneticAnalysis" class="phonetic-analysis hidden">
-            <h2 class="text-xl font-bold mb-2">Analyse des Sons</h2>
+            <h2 class="text-xl font-bold mb-2">tips</h2>
             <div id="phoneticAnalysisContent"></div>
         </div>
         <div id="alertBox" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" role="alert">
